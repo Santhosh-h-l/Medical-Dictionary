@@ -1,0 +1,51 @@
+!pip install PyPDF2
+
+from google.colab import drive
+drive.mount('/content/drive')
+
+import PyPDF2
+import re
+
+def extract_text_from_pdf(pdf_path):
+    """Extracts text from a PDF file."""
+    with open(pdf_path, 'rb') as pdf_file:
+        pdf_reader = PyPDF2.PdfReader(pdf_file)
+        num_pages = len(pdf_reader.pages)
+        text = ""
+        for page_num in range(num_pages):
+            page = pdf_reader.pages[page_num]
+            text += page.extract_text()
+    return text
+
+def answer_query(query, text):
+    """Answers a query with detailed information."""
+    # Find all occurrences of the query (case-insensitive)
+    matches = re.finditer(query, text, re.IGNORECASE)
+
+    if matches:
+        answer = f"Yes, the PDF file contains information about '{query}'.\n\n"
+        for match in matches:
+            # Extract context around the match (e.g., 100 characters before and after)
+            start = max(0, match.start() - 500)
+            end = min(len(text), match.end() + 500)
+            context = text[start:end]
+
+            answer += f"Context: ...{context}...\n\n"  # Add context to the answer
+        return answer
+    else:
+        return f"No, the PDF file does not contain information about '{query}'."
+
+# ... (rest of the code remains the same)
+
+# Replace with the path to your PDF file in Google Drive
+pdf_path = '/content/drive/My Drive/healthopedia.pdf.pdf'
+
+# Extract text from the PDF file
+pdf_text = extract_text_from_pdf(pdf_path)
+
+# Get user query
+user_query = input("Enter your query: ")
+
+# Answer the query
+answer = answer_query(user_query, pdf_text)
+print(answer)
