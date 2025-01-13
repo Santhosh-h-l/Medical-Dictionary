@@ -12,6 +12,9 @@ Medical Dictionary is chatbot which answers the user query with reference to pdf
 **Libraries used**:
 --> Google Colab, pypdf.
 
+**Accomplishments that we're proud of** :
+We actualy made it work!
+
 **Developed By**:
 Santhosh H L
 
